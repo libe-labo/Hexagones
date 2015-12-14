@@ -53,7 +53,7 @@ window.addEventListener('load', function() {
                     return function() {
                         // Darken color
                         var d3This = d3.select(this);
-                        d3This.attr('fill', d3.rgb(d3This.attr('x-color')).darker());
+                        d3This.attr('fill', d3.rgb(d3This.attr('x-color')).darker(.5));
                     };
                 })(selection, i))
                 .on('mouseleave', (function(selection, idx) {

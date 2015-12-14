@@ -4,6 +4,8 @@ window.addEventListener('load', function() {
             borders: '#ffffff',
             empty: '#c6c6c6'
         },
+        colorize: 'r', // d = Départements, r = Régions, or = Anciennes régions
+        idFrom: 'Région',
         colorFrom: 'Couleur'
     };
 
@@ -12,22 +14,37 @@ window.addEventListener('load', function() {
 
     var or = svg.select('#ARegions'), // Anciennes régions
         r = svg.select('#Regions'), // Régions
-        d = svg.select('#Dpts'); // Départements
+        d = svg.select('#Dpts'), // Départements
+        selections = { or : or , r : r , d : d };
 
     svg.select('#Labels').selectAll('*').style('pointer-events', 'none').attr('fill', 'rgb(255, 255, 255)');
 
     var setColors = function() {
-        or.selectAll('polygon').attr('fill', 'transparent').style('pointer-events', 'none').attr('stroke', config.colors.borders);
-        r.selectAll('polygon').attr('fill', 'transparent').style('pointer-events', 'none').attr('stroke', config.colors.borders);
-        d.selectAll('polygon').attr('fill', config.colors.empty).attr('stroke', config.colors.borders);
+        var i;
 
-        for (var i = 0; i < allData.length; ++i) {
+        // Reset everything
+        for (i in selections) if (selections.hasOwnProperty(i)) {
+            selections[i].selectAll('polygon').attr({
+                fill: 'transparent',
+                stroke: config.colors.borders
+            }).style('pointer-events', 'none');
+        }
+
+        selections[config.colorize].selectAll('polygon').attr({
+            fill: config.colors.empty
+        }).style('pointer-events', 'all');
+
+        // Colorize
+        for (i = 0; i < allData.length; ++i) {
             var selection = d3.select('NOTHING');
 
             color = config.colorFrom(allData[i]);
 
-            var id = '_x3' + String(allData[i].ID)[0] + '_' + String(allData[i].ID).slice(1);
-            selection = d.select('#' + id);
+            var id = String(allData[i][config.idFrom]);
+            if (config.colorize === 'd') {
+                id = '_x3' + id[0] + '_' + id.slice(1);
+            }
+            selection = selections[config.colorize].select('#' + id.toLowerCase());
 
             selection
                 .attr('fill', color)

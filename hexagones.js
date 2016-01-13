@@ -4,17 +4,17 @@ window.addEventListener('load', function() {
             borders: '#ffffff',
             empty: '#c6c6c6'
         },
-        colorize: 'r', // d = Départements, r = Régions, or = Anciennes régions
-        idFrom: 'Région',
-        colorFrom: 'Couleur'
+        colorize: 'd', // d = Départements, r = Régions, or = Anciennes régions
+        idFrom: '',
+        colorFrom: ''
     };
 
     var svg = d3.select(d3.select('#map')[0][0].getSVGDocument()),
         allData = [];
 
-    var or = svg.select('#ARegions'), // Anciennes régions
-        r = svg.select('#Regions'), // Régions
-        d = svg.select('#Dpts'), // Départements
+    var or = svg.select('#Anciennes_régions'), // Anciennes régions
+        r = svg.select('#Régions'), // Régions
+        d = svg.select('#Départements_1_'), // Départements
         selections = { or : or , r : r , d : d };
 
     svg.select('#Labels').selectAll('*').style('pointer-events', 'none').attr('fill', 'rgb(255, 255, 255)');
@@ -75,7 +75,7 @@ window.addEventListener('load', function() {
         })();
     }
 
-    d3.tsv('data.tsv', function(data) {
+    d3.tsv('', function(data) {
         allData = data;
 
         setColors();
